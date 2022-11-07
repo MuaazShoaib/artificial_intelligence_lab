@@ -77,3 +77,54 @@ solution = uniform_cost_search(graph=GRAPH, initial_state=INITIAL_STATE, goal_st
 print(solution)
 
 ```
+### Breadth First Search
+```
+# breadth first search
+
+class Node:
+    def __init__(self, state, parent, actions, total_cost):
+        self.state = state
+        self.parent = parent
+        self.actions = actions
+        self.total_cost = total_cost
+
+
+def action_sequence(graph, initial_state, goal_state):
+    solution = [goal_state]
+    current_parent = graph[goal_state].parent
+    while current_parent is not None:
+        solution.append(current_parent)
+        current_parent = graph[current_parent].parent
+    solution.reverse()
+    return solution
+
+
+def breadth_first_search(graph, initial_state, goal_state):
+    queue = [initial_state]
+    visited = []
+
+    while len(queue) != 0:
+        current_node = queue.pop(0)
+        visited.append(current_node)
+        for child in graph[current_node].actions:
+            if child not in queue and child not in visited:
+                graph[child].parent = current_node
+                if graph[child].state == goal_state:
+                    return action_sequence(graph, initial_state, goal_state)
+                queue.append(child)
+
+
+GRAPH = {'A': Node('A', None, ['B', 'C', 'E'], None),
+         'B': Node('B', None, ['A', 'D', 'E'], None),
+         'C': Node('C', None, ['A', 'F', 'G'], None),
+         'D': Node('D', None, ['B', 'E'], None),
+         'E': Node('E', None, ['A', 'B', 'D'], None),
+         'F': Node('F', None, ['C'], None),
+         'G': Node('G', None, ['C'], None)}
+
+INITIAL_STATE = 'F'
+GOAL_STATE = 'A'
+
+sol = breadth_first_search(graph=GRAPH, initial_state=INITIAL_STATE, goal_state=GOAL_STATE)
+print(sol)
+```
