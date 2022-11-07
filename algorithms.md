@@ -133,6 +133,61 @@ start = {
 print(iterative_deepening_dfs(start, 6)["value"])
 ```
 
+### Depth First Search
+```
+# depth first search
+
+class Node:
+    def __init__(self, state, parent, actions, total_cost):
+        self.state = state
+        self.parent = parent
+        self.actions = actions
+        self.total_cost = total_cost
+
+
+def depth_first_search(graph, initial_state, goal_state):
+    frontier = [initial_state]
+    explored = []
+
+    while len(frontier) != 0:
+        current_node = frontier.pop(len(frontier) - 1)
+        explored.append(current_node)
+
+        for child in graph[current_node].actions:
+            if child not in frontier and child not in explored:
+                graph[child].parent = current_node
+                if graph[child].state == goal_state:
+                    print("Explored Node List:", explored)
+                    return action_sequence(graph, initial_state, goal_state)
+                frontier.append(child)
+
+
+def action_sequence(graph, initial_state, goal_state):
+    solution = [goal_state]
+    current_parent = graph[goal_state].parent
+
+    while current_parent is not None:
+        solution.append(current_parent)
+        current_parent = graph[current_parent].parent
+        solution.reverse()
+        return solution
+
+
+GRAPH = {'A': Node('A', None, ['B', 'E', 'C'], None),
+         'B': Node('B', None, ['D', 'E', 'A'], None),
+         'C': Node('C', None, ['A', 'F', 'G'], None),
+         'D': Node('D', None, ['B', 'E'], None),
+         'E': Node('E', None, ['A', 'B', 'D'], None),
+         'F': Node('F', None, ['C'], None),
+         'G': Node('G', None, ['C'], None)}
+
+INITIAL_STATE = "A"
+GOAL_STATE = "D"
+
+sol = depth_first_search(graph=GRAPH, initial_state=INITIAL_STATE, goal_state=GOAL_STATE)
+print(sol)
+```
+
 ### Breadth First Search
 ```
 # breadth first search
